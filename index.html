@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaflet Web Map</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    
+    <link rel="stylesheet" href="css/styles.css"/> 
+    
+    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+
+    <!-- <script src="https://accounts.google.com/gsi/client"></script> Didn't get this to work -->
+
+</head>
+<body>
+    <div id="header">This is a test for my final project</div>
+
+    <div> <br><br/></div>
+
+    <div id= text style="font-size: large; color: white; padding: 20px; text-align: left;">
+    Below is an interactive map designed to extract tiles at a chosen zoom levels
+    from popular web map tiles services. Available here are: ESRI Satellite Imagery, 
+    OpenTopoMap, Stadia Outdoor, and CartoDB Voyager.
+
+    To begin, either select a region with the "Draw Polygon Tool" (the pentagon in the 
+    top left) or upload a geojson file. 
+    <br><br>
+    </div>
+    
+    <div id="mapdiv"></div>
+
+    <div class="date-range-container">
+        <label for="start-date">Start Date:</label>
+        <input type="date" id="start-date" name="start-date">
+        
+        <label for="end-date">End Date:</label>
+        <input type="date" id="end-date" name="end-date">
+
+        <label for="timeframe">Select Image Frequency:</label>
+        <select id="timeframe" name="timeframe">
+            <option value="all">All Images</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+            <option value="yearly">Yearly</option>
+        </select>
+
+        <button id="select-button">Select</button>
+    </div>
+
+    <div id=text style="font-size: large; color: white; padding: 20px; text-align: left;">
+       Once you have an area selected, click the download button and choose a zoom level (within 
+       about 2 levels of the current zoom - shown in the bottom left). The image will now be downloaded.
+       **Note: The date range feature is still in development.
+        <br><br>
+        </div>
+
+    <script src="js/scripts.js"></script>
+
+    
+
+
+</body>
+</html>

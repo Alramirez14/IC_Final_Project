@@ -1,0 +1,155 @@
+body {
+    display: flex;
+    flex-direction: column;  /* Stack maps vertically */
+    justify-content: center; /* Center content vertically */
+    align-items: center;     /* Center content horizontally */
+    text-align: center;      /* Center titles and text */
+    margin: auto;       /* Full viewport height */
+    background-color: #373847;
+    font-family: sans-serif;
+}
+
+#text {
+    color: white;
+    width: 80%;
+}
+
+#header {
+    font-size: xx-large;
+    background-color: darkgreen;
+    width: 100%;
+    color: white;
+    padding: 20px;
+}
+
+#mapdiv {
+    height: 1000px; 
+    width: 80%; 
+    margin: auto;
+    border: solid;
+    border-width: 1px;
+    border-color: darkgreen;
+}
+
+.zoom-display{
+    background-color: white;
+    padding: 1%;
+    width: 60px;
+    font-size: 14px;
+    border-radius: 4px;
+}
+
+.download-button button { /* Target the button inside the div */
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.download-button button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.download-button button:hover:enabled {
+    background-color: #3e8e41;
+}
+
+.controls-div {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    margin: 10px auto; /* Center horizontally with margin */
+}
+
+#customBrowseButton {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
+    cursor: pointer;
+    background-color: #e0e0e0;
+}
+
+#customBrowseButton:hover{
+    background-color: #d0d0d0;
+}
+
+#downloadTiles {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#downloadTiles:hover {
+    background-color: #388E3C;
+}
+
+#downloadTiles:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.info {
+    background-color: white;
+    padding: 2%; 
+    border-radius: 4px; 
+    font-size: 14px; 
+    color: black;
+    font-family: sans-serif;
+   /* position: bottom-left; */
+}
+
+.date-range-container {
+    margin: 20px;
+    padding: 20px;
+    width: 300px;
+    text-align: center;
+    color: white;
+    font-family: sans-serif;
+}
+
+.date-range-container label {
+    display: block;
+    margin: 5px 0;
+    font-family: sans-serif;
+}
+
+.date-range-container select, 
+.date-range-container input[type="date"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    font-family: sans-serif;
+}
+
+.date-range-container button {
+    padding: 10px 15px;
+    background-color: white;
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    color: Black;
+    font-family: sans-serif;
+}
+
+.date-range-container button:hover {
+    background-color: #388E3C;
+    font-family: sans-serif;
+}
