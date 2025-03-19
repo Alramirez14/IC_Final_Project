@@ -36,7 +36,7 @@ var baseLayers = {
     "CartoDB Voyager": CartoDB_Voyager
 };
 
-// Add the first base layer to the map
+// Add my default base layer to the map
 map.addLayer(esriSatelliteLayer);
 
 // Create a layer control and add it to the map
@@ -62,7 +62,7 @@ var drawControl = new L.Control.Draw({
 });
 map.addControl(drawControl);
 
-let drawnPolygonLayer = null; // Store the drawn polygon layer
+let drawnPolygonLayer = null; // Make a spot for the polygon
 
 map.on(L.Draw.Event.CREATED, function (event) {
     var layer = event.layer;
@@ -74,7 +74,7 @@ map.on(L.Draw.Event.CREATED, function (event) {
     var geojson = drawnPolygonLayer.toGeoJSON(); // Convert to GeoJSON
     var area = turf.area(geojson); // Calculate area in square meters
     
-    // Convert square meters to hectares (1 hectare = 10,000 square meters)
+    // Convert square meters to hectares for display (just a fun flex of turf)
     var areaInHectares = (area / 10000).toFixed(2); 
 
     // Display the area in a popup or control
@@ -87,7 +87,7 @@ map.on(L.Draw.Event.CREATED, function (event) {
     areaDisplay.addTo(map);
 });
 
-var controlsDiv = L.control({ position: 'bottomleft' });
+var controlsDiv = L.control({ position: 'bottomleft' }); //here is a spot to upload user polygons
 controlsDiv.onAdd = function (map) {
     var div = L.DomUtil.create('div', 'controls-div');
     div.innerHTML = '<input type="file" id="geojsonUpload" accept=".geojson,.json"><button id="downloadTiles" disabled>Download Tiles</button>';
@@ -95,7 +95,7 @@ controlsDiv.onAdd = function (map) {
 };
 controlsDiv.addTo(map);
 
-map.on(L.Draw.Event.CREATED, function (event) {
+map.on(L.Draw.Event.CREATED, function (event) { //makes the geojson work like the polygon draw
     var layer = event.layer;
     drawnItems.clearLayers(); //clear previous drawings
     drawnItems.addLayer(layer);
@@ -112,7 +112,7 @@ document.getElementById('downloadTiles').addEventListener('click', function () {
     }
 });
 
-document.getElementById('geojsonUpload').addEventListener('change', function (e) {
+document.getElementById('geojsonUpload').addEventListener('change', function (e) { //loading method for the user geojson
     var file = e.target.files[0];
     if (file) {
         var reader = new FileReader();
@@ -135,7 +135,7 @@ document.getElementById('geojsonUpload').addEventListener('change', function (e)
                     if (drawnItems.getLayers().length > 0) {
                         map.fitBounds(geojsonLayer.getBounds()); // Set the map view to the GeoJSON bounds
                         document.getElementById('downloadTiles').disabled = false;
-                    } else {
+                    } else { //error checking help from ChatGPT/Gemini (used to have problems with this)
                         alert('Invalid GeoJSON file. Must contain at least one Polygon or MultiPolygon feature.');
                     }
                 } else {
@@ -149,16 +149,14 @@ document.getElementById('geojsonUpload').addEventListener('change', function (e)
     }
 });
 
-var tileLayerUrl = 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png';
-
-async function downloadTiles(polygonLayer) {
+async function downloadTiles(polygonLayer) { //tile downloading function
     var bounds = polygonLayer.getBounds();
     var zoom = prompt("Please Select a Zoom Level (1-19) **Note that higher zoom levels will decrease performance");
 
     // Convert zoom to a number
     zoom = parseInt(zoom);
 
-    if (isNaN(zoom)) {
+    if (isNaN(zoom)) { //error proofing from ChatGPT/Gemini
         alert("Invalid zoom level. Please enter a number.");
         return; // Exit the function if zoom is not a number
     }
@@ -190,7 +188,7 @@ async function downloadTiles(polygonLayer) {
         try {
             let url = activeTileLayerUrl;
 
-            // Stadia Maps specific handling
+            // Stadia Maps specific handling (needed Gemini to help proof for this case, but my stadia doesn't work anymore anyway - too many requests)
             if (activeTileLayerUrl.includes('stadiamaps.com')) {
                 url = activeTileLayerUrl.replace('{z}', tile.z).replace('{x}', tile.x).replace('{y}', tile.y);
                 //remove the {r} so that leaflet does not add @2x, because we are downloading directly.
@@ -204,7 +202,7 @@ async function downloadTiles(polygonLayer) {
                 url = url.replace('{z}', tile.z).replace('{y}', tile.y).replace('{x}', tile.x);
             }
 
-            const response = await fetch(url);
+            const response = await fetch(url); //more error proofing from Gemini (this gave issues at the beginning)
             if (response.status === 200) {
                 return { tile, blob: await response.blob() };
             } else if (response.status === 404) {
@@ -232,7 +230,7 @@ async function downloadTiles(polygonLayer) {
         drawnPolygonLayer = null;
     });
 }
-async function mosaicTiles(tileDataArray, polygonLayer, zoom) { // Receive zoom here
+async function mosaicTiles(tileDataArray, polygonLayer, zoom) { // This was debugged with Gemini, which also helped with the bounding logic
     const tileSize = 256;
     const minX = Math.min(...tileDataArray.map(item => item.tile.x));
     const minY = Math.min(...tileDataArray.map(item => item.tile.y));
@@ -262,7 +260,7 @@ async function mosaicTiles(tileDataArray, polygonLayer, zoom) { // Receive zoom 
         });
     });
 
-    Promise.all(imagePromises).then(() => {
+    Promise.all(imagePromises).then(() => { //downloads the chosen data
         clipCanvasToPolygon(canvas, ctx, polygonLayer, zoom); // Pass zoom here
         const dataURL = canvas.toDataURL('image/png');
         const link = document.createElement('a');
@@ -274,7 +272,7 @@ async function mosaicTiles(tileDataArray, polygonLayer, zoom) { // Receive zoom 
     });
 }
 
-function clipCanvasToPolygon(canvas, ctx, layerOrFeatureGroup, zoom) {
+function clipCanvasToPolygon(canvas, ctx, layerOrFeatureGroup, zoom) { //this whole chunck was itterated with help from ChatGPT. I will revise this later to better handle multipart clipping. 
     ctx.globalCompositeOperation = 'destination-in';
 
     let layers = [];
@@ -342,7 +340,7 @@ function calculateTileGrid(bounds, zoom) {
     return tiles;
 }
 
-var zoomDisplay = L.control({ position: 'bottomleft' });
+var zoomDisplay = L.control({ position: 'bottomleft' }); //displays zoom for user's info
 zoomDisplay.onAdd = function (map) {
     var div = L.DomUtil.create('div', 'zoom-display');
     div.innerHTML = 'Zoom: ' + map.getZoom();
@@ -355,7 +353,7 @@ map.on('zoomend', function () {
     document.querySelector('.zoom-display').innerHTML = 'Zoom: ' + map.getZoom();
 });
 
-document.getElementById('select-button').addEventListener('click', function() {
+document.getElementById('select-button').addEventListener('click', function() { //INDEV for data range selection
     const startDate = document.getElementById('start-date').value;
     const endDate = document.getElementById('end-date').value;
     const timeframe = document.getElementById('timeframe').value;
